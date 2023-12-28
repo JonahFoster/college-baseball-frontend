@@ -1,0 +1,14 @@
+.school-logo {
+    max-width: 120px;
+    max-height: 120px;
+    width: 100%;
+    height: auto;
+}
+
+th, td {
+    border: 1px solid #5a5a6b;
+}
+
+table {
+    margin-bottom: 1em;
+}
