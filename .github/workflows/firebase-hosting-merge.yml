@@ -18,3 +18,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COLLEGE_BASEBALL_STATS }}'
           channelId: live
           projectId: college-baseball-stats
+          entryPoint: college-baseball-app\firebase.json
