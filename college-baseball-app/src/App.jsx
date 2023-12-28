@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { Grid, CssBaseline, Box, Container } from '@mui/material';
+import { Grid, CssBaseline, Box, Container } from '@mui/material'
+import { firestore } from '../firebase'
 import Header from "./Header.jsx"
 import Player from "./Player.jsx"
 import TopList from "./TopList.jsx"
@@ -77,24 +78,28 @@ export default function App() {
   }
 
   function handleSearch(name, navigate) {
-    fetch(`http://localhost:3000/search/${name.replace(/\s/g, '-')}`)
-      .then(response => response.json())
-      .then(data => {
-        const firstPlayerSeq = data[0].stats_player_seq;
-        const hasMultiplePlayers = data.some(player => player.stats_player_seq !== firstPlayerSeq);
+    firestore.collection('collegebaseballplayer_unified')
+      .where('name', '==', name)
+      .get()
+      .then(querySnapshot => {
+        const players = querySnapshot.docs.map(doc => doc.data());
+        const firstPlayerSeq = players[0]?.stats_player_seq;
+        const hasMultiplePlayers = players.some(player => player.stats_player_seq !== firstPlayerSeq);
   
         if (!hasMultiplePlayers) {
-          // If only one unique player is returned, set the player data and navigate to the player page
-          setPlayerData(data[0]);
+          setPlayerData(players[0]);
           navigate(`/player/${firstPlayerSeq}`);
         } else {
-          // Multiple players found with the same name
-          setMultipleSearchResults(data);
+          setMultipleSearchResults(players);
           navigate('/search');
         }
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        console.error(error);
+        navigate('/search');
+      });
   }
+  
   
   
 

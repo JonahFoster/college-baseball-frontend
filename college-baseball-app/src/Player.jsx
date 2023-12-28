@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Card, CardContent, Typography, Box, Chip, CircularProgress } from '@mui/material';
+import { firestore } from '../firebase'
 import Batting from './Batting';
 import Fielding from './Fielding';
 import Pitching from './Pitching';
@@ -15,10 +16,14 @@ export default function Player() {
   
   useEffect(() => {
     setIsLoading(true);
-    fetch(`http://localhost:3000/player/${stats_player_seq}`)
-      .then(response => response.json())
-      .then(data => {
-        setData(data);
+    firestore.collection('collegebaseballplayer_unified')
+      .doc(stats_player_seq)
+      .get()
+      .then(doc => {
+        if (!doc.exists) {
+          throw new Error('Player not found');
+        }
+        setData([doc.data()]);
         setIsLoading(false);
       })
       .catch(error => {
@@ -26,6 +31,7 @@ export default function Player() {
         setIsLoading(false);
       });
   }, [stats_player_seq]);
+  
 
   const playerInfo = data[data.length - 1] || {};  
   const { name, Jersey, pos, Yr, school_name } = playerInfo;
