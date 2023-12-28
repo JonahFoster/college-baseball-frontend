@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Card, CardContent, Typography, Box, Chip, CircularProgress } from '@mui/material';
-import { firestore } from '../firebase'
+import { firestore } from '../firebase'; // Ensure this path is correct
+import { doc, getDoc } from "firebase/firestore"; // Import required Firestore functions
 import Batting from './Batting';
 import Fielding from './Fielding';
 import Pitching from './Pitching';
 import teamInfo from './assets/logos.json';
-import './assets/player.css'
-import defaultLogo from'./assets/cbb-stats-logo.webp'
+import './assets/player.css';
+import defaultLogo from './assets/cbb-stats-logo.webp';
 
 export default function Player() {
   const [data, setData] = useState([]);
@@ -16,14 +17,13 @@ export default function Player() {
   
   useEffect(() => {
     setIsLoading(true);
-    firestore.collection('collegebaseballplayer_unified')
-      .doc(stats_player_seq)
-      .get()
-      .then(doc => {
-        if (!doc.exists) {
+    const docRef = doc(firestore, 'collegebaseballplayer_unified', stats_player_seq); // Create a reference to the document
+    getDoc(docRef)
+      .then(docSnap => {
+        if (!docSnap.exists()) {
           throw new Error('Player not found');
         }
-        setData([doc.data()]);
+        setData([docSnap.data()]);
         setIsLoading(false);
       })
       .catch(error => {
