@@ -32,13 +32,28 @@ export default function Player() {
       });
   }, [stats_player_seq]);
 
-  const { name, jerseyNumber, position, class: playerClass, school } = playerData;
+  const { name, school } = playerData;
 
   const teamData = teamInfo.find(team => team.ncaa_name === school) || {}; 
 
   let hasPitching = false;
   let hasBatting = false;
   let hasFielding = false;
+  
+  let years = []
+  if (playerData.stats) {
+    for (let year in playerData.stats) {
+      years.push(parseInt(year, 10))
+    }
+  }
+  const latestYear = years.length > 0 ? Math.max(...years) : null
+  let playerClass, position, jerseyNumber;
+
+  if (latestYear) {
+    playerClass = playerData.stats[latestYear].class;
+    position = playerData.stats[latestYear].position;
+    jerseyNumber = playerData.stats[latestYear].jerseyNumber;
+  }
   
   for (let year in playerData.stats) {
       if (playerData.stats[year].pitching && playerData.stats[year].pitching.pitches > 0) {
