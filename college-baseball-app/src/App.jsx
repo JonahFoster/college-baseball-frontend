@@ -80,32 +80,34 @@ export default function App() {
 
   async function handleSearch(name, navigate) {
     try {
-      const q = query(collection(firestore, 'collegebaseballplayer_unified'), where('name', '==', name));
-      const querySnapshot = await getDocs(q);
-      const players = querySnapshot.docs.map(doc => doc.data());
+      // Query the Firestore database for players with the matching name
+      const playersQuery = query(collection(firestore, 'collegebaseballplayer'), where('name', '==', name));
+      const querySnapshot = await getDocs(playersQuery);
+      const players = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   
+      // Handle no matching players found
       if (players.length === 0) {
         console.log('No matching players found');
         navigate('/search');
         return;
       }
   
-      const firstPlayerSeq = players[0].stats_player_seq;
-      const hasMultiplePlayers = players.some(player => player.stats_player_seq !== firstPlayerSeq);
-  
-      if (!hasMultiplePlayers) {
+      // If only one player is found, set player data and navigate to player page
+      if (players.length === 1) {
         setPlayerData(players[0]);
-        navigate(`/player/${firstPlayerSeq}`);
-      } else {
-        setMultipleSearchResults(players);
-        navigate('/search');
-      }
+        navigate(`/player/${players[0].id}`);
+        return;
+      } 
+  
+      // If multiple players are found, set multiple search results and navigate to search page
+      setMultipleSearchResults(players);
+      navigate('/search');
     } catch (error) {
+      // Handle errors in fetching players
       console.error('Error fetching players:', error);
       navigate('/search');
     }
   }
-  
   
   
 

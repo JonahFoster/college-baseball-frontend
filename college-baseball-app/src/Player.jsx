@@ -11,19 +11,19 @@ import './assets/player.css';
 import defaultLogo from './assets/cbb-stats-logo.webp';
 
 export default function Player() {
-  const [data, setData] = useState([]);
+  const [playerData, setPlayerData] = useState({});
   const [isLoading, setIsLoading] = useState(true); 
   const { stats_player_seq } = useParams(); 
-  
+
   useEffect(() => {
     setIsLoading(true);
-    const docRef = doc(firestore, 'collegebaseballplayer_unified', stats_player_seq); // Create a reference to the document
+    const docRef = doc(firestore, 'collegebaseballplayer', stats_player_seq);
     getDoc(docRef)
       .then(docSnap => {
         if (!docSnap.exists()) {
           throw new Error('Player not found');
         }
-        setData([docSnap.data()]);
+        setPlayerData(docSnap.data());
         setIsLoading(false);
       })
       .catch(error => {
@@ -31,22 +31,36 @@ export default function Player() {
         setIsLoading(false);
       });
   }, [stats_player_seq]);
+
+  const { name, jerseyNumber, position, class: playerClass, school } = playerData;
+
+  const teamData = teamInfo.find(team => team.ncaa_name === school) || {}; 
+
+  let hasPitching = false;
+  let hasBatting = false;
+  let hasFielding = false;
   
+  for (let year in playerData.stats) {
+      if (playerData.stats[year].pitching && playerData.stats[year].pitching.pitches > 0) {
+          hasPitching = true;
+      }
+  
+      if (playerData.stats[year].batting && playerData.stats[year].batting.AB > 0) {
+          hasBatting = true;
+      }
+  
+      if (playerData.stats[year].fielding && playerData.stats[year].fielding.GP > 0) {
+          hasFielding = true;
+      }
+  
+      if (hasPitching && hasBatting && hasFielding) {
+          break;
+      }
+  }
 
-  const playerInfo = data[data.length - 1] || {};  
-  const { name, Jersey, pos, Yr, school_name } = playerInfo;
-
-  const teamData = teamInfo.find(team => team.ncaa_name === school_name) || {}; 
-
-  const hasBatting = !!data.find(stat => stat.data_type === 'batting' && stat.AB !== 0);
-  const hasFielding = !!data.find(stat => stat.data_type === 'fielding');
-  const hasPitching = !!data.find(stat => stat.data_type === 'pitching' && stat.pitches !== 0);
-
-  function createFullYear(year) {
-    if (year === "Fr") return "Freshman";
-    if (year === "So") return "Sophomore";
-    if (year === "Jr") return "Junior";
-    if (year === "Sr") return "Senior";
+  function createFullYear(yearShort) {
+    const yearMap = {"Fr": "Freshman", "So": "Sophomore", "Jr": "Junior", "Sr": "Senior"};
+    return yearMap[yearShort] || yearShort;
   }
 
   if (isLoading) {
@@ -56,7 +70,7 @@ export default function Player() {
       </Box>
     );
   }
-
+  console.log(playerData)
   return (
     <Container>
       <Card variant="outlined">
@@ -67,7 +81,7 @@ export default function Player() {
             </Typography>
             <Box mt={2}>
             <Chip 
-              label={school_name} 
+              label={school} 
               sx={{ 
                 mr: '5px',
                 backgroundColor: (theme) => teamData.primary || theme.palette.primary.main,
@@ -75,7 +89,7 @@ export default function Player() {
               }}
             />
             <Chip 
-              label={`#${Jersey}`} 
+              label={`#${jerseyNumber}`} 
               sx={{ 
                 mr: '5px',
                 backgroundColor: (theme) => teamData.primary || theme.palette.primary.main,
@@ -83,7 +97,7 @@ export default function Player() {
               }}
             />
             <Chip 
-              label={pos} 
+              label={position} 
               sx={{ 
                 mr: '5px',
                 backgroundColor: (theme) => teamData.primary || theme.palette.primary.main,
@@ -91,7 +105,7 @@ export default function Player() {
               }}
             />
             <Chip 
-              label={createFullYear(Yr)} 
+              label={createFullYear(playerClass)} 
               sx={{ 
                 backgroundColor: (theme) => teamData.primary || theme.palette.primary.main,
                 color: theme => theme.palette.getContrastText(teamData.primary || theme.palette.primary.main),
@@ -99,22 +113,25 @@ export default function Player() {
             />
             </Box>
           </Box>
-          <img src={teamData.logos || defaultLogo} alt={`${school_name} logo`} className="school-logo" />
+          <img src={teamData.logos || defaultLogo} alt={`${school} logo`} className="school-logo" />
         </CardContent>
       </Card>
       {hasBatting && (
         <Card variant="outlined" sx={{ mt: '10px' }}>
-          <Batting data={data} />
+          {console.log("Rendering Batting")}
+          <Batting data={playerData} />
         </Card>
       )}
       {hasPitching && (
-        <Card variant="outlined" sx={{ mt: '10px' }}>
-          <Pitching data={data} />
-        </Card>
+          <Card variant="outlined" sx={{ mt: '10px' }}>
+            {console.log("Rendering Pitching")}
+            <Pitching data={playerData} />
+          </Card>
       )}
       {hasFielding && (
         <Card variant="outlined" sx={{ mt: '10px' }}>
-          <Fielding data={data} />
+          {console.log("Rendering Fielding")}
+          <Fielding data={playerData} />
         </Card>
       )}
     </Container>
