@@ -1,9 +1,9 @@
-import { TextField, Button, Grid, FormControlLabel, Switch } from '@mui/material' 
+import { TextField, Button, Grid } from '@mui/material' 
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types' 
 import { useRef } from 'react' 
 
-export default function Header({ onSearch, darkMode, onToggleDarkMode }) {
+export default function Header({ onSearch }) {
   // Ref to hold the input element for player name search
   const inputRef = useRef()
 
@@ -41,11 +41,6 @@ export default function Header({ onSearch, darkMode, onToggleDarkMode }) {
             Search
           </Button>
         </Grid>
-      </Grid>
-      <Grid item>
-        <FormControlLabel
-          control={<Switch checked={darkMode} onChange={onToggleDarkMode} />}
-        />
       </Grid>
     </Grid>
   )

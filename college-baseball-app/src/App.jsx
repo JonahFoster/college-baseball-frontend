@@ -11,7 +11,6 @@ import Search from "./Search.jsx"
 
 export default function App() {
   const [playerData, setPlayerData] = useState(null)
-  const [darkMode, setDarkMode] = useState(true)
   const [multipleSearchResults, setMultipleSearchResults] = useState([]);
   const [topListData, setTopListData] = useState({
     hr: [],
@@ -27,7 +26,7 @@ export default function App() {
 
   const theme = createTheme({
     palette: {
-      mode: darkMode ? 'dark' : 'light',
+      mode: 'dark',
       primary: {
         main: '#0055CC',
       },
@@ -38,13 +37,13 @@ export default function App() {
         main: '#ff4d4d',
       },
       background: {
-        default: darkMode ? '#2b2b30' : '#F4F3F2',
-        paper: darkMode ? '#383842' : '#EFF1F3',
+        default: '#2b2b30',
+        paper: '#383842',
       },
       text: {
-        primary: darkMode ? '#ffffff' : '#000000',
-        secondary: darkMode ? '#bbbbbb' : '#000000',
-        tertiary: darkMode ? '#0055CC' : '#0055CC',
+        primary: '#ffffff',
+        secondary: '#bbbbbb',
+        tertiary: '#0055CC',
       },
     },
     components: {
@@ -72,11 +71,6 @@ export default function App() {
       },
     },
   });
-  
-
-  function handleDarkMode() {
-    setDarkMode(!darkMode)
-  }
 
   async function handleSearch(name, navigate) {
     try {
@@ -152,8 +146,6 @@ export default function App() {
         <Box style={{ paddingBottom: '50px' }}>
           <Header
             onSearch={handleSearch}
-            darkMode={darkMode}
-            onToggleDarkMode={handleDarkMode}
           />
           <Routes>
             <Route path="/player/:stats_player_seq" element={<Player data={playerData} />} />
