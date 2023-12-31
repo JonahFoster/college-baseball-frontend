@@ -2,7 +2,6 @@ import { TextField, Button, Grid } from '@mui/material'
 import { useNavigate } from 'react-router-dom' 
 import PropTypes from 'prop-types' 
 import { useRef } from 'react' 
-import './assets/header.css'
 
 export default function Header({ onSearch }) {
  
@@ -38,9 +37,18 @@ export default function Header({ onSearch }) {
           />
         </Grid>
         <Grid item>
-          <Button variant="contained" onClick={handleSearch} sx={{ marginLeft: 2 }}>
-            Search
-          </Button>
+        <Button 
+          variant="contained" 
+          onClick={handleSearch} 
+          sx={{ 
+            marginLeft: 2, 
+            '@media (max-width:600px)': {
+              marginTop: '1em',
+            }
+          }}
+        >
+          Search
+      </Button>
         </Grid>
       </Grid>
     </Grid>

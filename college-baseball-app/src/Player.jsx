@@ -125,6 +125,7 @@ export default function Player() {
               sx={{ 
                 backgroundColor: (theme) => teamData.primary || theme.palette.primary.main,
                 color: theme => theme.palette.getContrastText(teamData.primary || theme.palette.primary.main),
+                mt: '5px',
               }}
             />
             </Box>
