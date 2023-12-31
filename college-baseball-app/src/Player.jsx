@@ -32,7 +32,7 @@ export default function Player() {
       });
   }, [stats_player_seq]);
 
-  const { name, school } = playerData;
+  const { name } = playerData;
 
   const teamData = teamInfo.find(team => team.ncaa_name === school) || {}; 
 
@@ -47,12 +47,13 @@ export default function Player() {
     }
   }
   const latestYear = years.length > 0 ? Math.max(...years) : null
-  let playerClass, position, jerseyNumber;
+  let playerClass, position, jerseyNumber, school
 
   if (latestYear) {
     playerClass = playerData.stats[latestYear].class;
     position = playerData.stats[latestYear].position;
     jerseyNumber = playerData.stats[latestYear].jerseyNumber;
+    school = playerData.stats[latestYear].school;
   }
   
   for (let year in playerData.stats) {
