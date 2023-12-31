@@ -43,7 +43,7 @@ export default function Header({ onSearch }) {
           sx={{ 
             marginLeft: 2, 
             '@media (max-width:600px)': {
-              marginTop: '1em',
+              marginTop: '1.7em',
             }
           }}
         >

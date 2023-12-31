@@ -100,6 +100,7 @@ export default function Player() {
               label={school} 
               sx={{ 
                 mr: '5px',
+                mt: '5px',
                 backgroundColor: (theme) => teamData.primary || theme.palette.primary.main,
                 color: theme => theme.palette.getContrastText(teamData.primary || theme.palette.primary.main),
               }}
@@ -108,6 +109,7 @@ export default function Player() {
               label={`#${jerseyNumber}`} 
               sx={{ 
                 mr: '5px',
+                mt: '5px',
                 backgroundColor: (theme) => teamData.primary || theme.palette.primary.main,
                 color: theme => theme.palette.getContrastText(teamData.primary || theme.palette.primary.main),
               }}
@@ -116,6 +118,7 @@ export default function Player() {
               label={position} 
               sx={{ 
                 mr: '5px',
+                mt: '5px',
                 backgroundColor: (theme) => teamData.primary || theme.palette.primary.main,
                 color: theme => theme.palette.getContrastText(teamData.primary || theme.palette.primary.main),
               }}
