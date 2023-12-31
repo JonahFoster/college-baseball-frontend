@@ -34,8 +34,6 @@ export default function Player() {
 
   const { name } = playerData;
 
-  const teamData = teamInfo.find(team => team.ncaa_name === school) || {}; 
-
   let hasPitching = false;
   let hasBatting = false;
   let hasFielding = false;
@@ -73,6 +71,8 @@ export default function Player() {
           break;
       }
   }
+
+  const teamData = teamInfo.find(team => team.ncaa_name === school) || {}; 
 
   function createFullYear(yearShort) {
     const yearMap = {"Fr": "Freshman", "So": "Sophomore", "Jr": "Junior", "Sr": "Senior"};

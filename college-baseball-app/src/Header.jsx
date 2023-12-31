@@ -48,7 +48,5 @@ export default function Header({ onSearch }) {
 
 Header.propTypes = {
   onSearch: PropTypes.func.isRequired,
-  darkMode: PropTypes.bool.isRequired,
-  onToggleDarkMode: PropTypes.func.isRequired,
 } 
 
