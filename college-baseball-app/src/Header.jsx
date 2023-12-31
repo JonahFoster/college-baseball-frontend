@@ -2,7 +2,7 @@ import { TextField, Button, Grid } from '@mui/material'
 import { useNavigate } from 'react-router-dom' 
 import PropTypes from 'prop-types' 
 import { useRef } from 'react' 
-import './assets/app.css'
+import './assets/header.css'
 
 export default function Header({ onSearch }) {
  
