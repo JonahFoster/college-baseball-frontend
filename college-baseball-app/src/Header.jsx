@@ -1,17 +1,18 @@
 import { TextField, Button, Grid } from '@mui/material' 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom' 
 import PropTypes from 'prop-types' 
 import { useRef } from 'react' 
+import './assets/app.css'
 
 export default function Header({ onSearch }) {
  
   const inputRef = useRef()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate() 
 
   function handleSearch() {
-    const name = inputRef.current.value;
-    onSearch(name, navigate); 
+    const name = inputRef.current.value 
+    onSearch(name, navigate)  
   }
   return (
     <Grid 

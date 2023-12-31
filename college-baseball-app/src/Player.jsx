@@ -1,42 +1,42 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Container, Card, CardContent, Typography, Box, Chip, CircularProgress } from '@mui/material';
-import { firestore } from '../firebase'; // Ensure this path is correct
-import { doc, getDoc } from "firebase/firestore"; // Import required Firestore functions
-import Batting from './Batting';
-import Fielding from './Fielding';
-import Pitching from './Pitching';
-import teamInfo from './assets/logos.json';
-import './assets/player.css';
-import defaultLogo from './assets/cbb-stats-logo.webp';
+import { useEffect, useState } from 'react' 
+import { useParams } from 'react-router-dom' 
+import { Container, Card, CardContent, Typography, Box, Chip, CircularProgress } from '@mui/material' 
+import { firestore } from '../firebase'  
+import { doc, getDoc } from "firebase/firestore"  
+import Batting from './Batting' 
+import Fielding from './Fielding' 
+import Pitching from './Pitching' 
+import teamInfo from './assets/logos.json' 
+import './assets/player.css' 
+import defaultLogo from './assets/cbb-stats-logo.webp' 
 
 export default function Player() {
-  const [playerData, setPlayerData] = useState({});
-  const [isLoading, setIsLoading] = useState(true); 
-  const { stats_player_seq } = useParams(); 
+  const [playerData, setPlayerData] = useState({})
+  const [isLoading, setIsLoading] = useState(true)
+  const { stats_player_seq } = useParams()
 
   useEffect(() => {
-    setIsLoading(true);
-    const docRef = doc(firestore, 'collegebaseballplayer', stats_player_seq);
+    setIsLoading(true) 
+    const docRef = doc(firestore, 'collegebaseballplayer', stats_player_seq) 
     getDoc(docRef)
       .then(docSnap => {
         if (!docSnap.exists()) {
-          throw new Error('Player not found');
+          throw new Error('Player not found') 
         }
-        setPlayerData(docSnap.data());
-        setIsLoading(false);
+        setPlayerData(docSnap.data()) 
+        setIsLoading(false) 
       })
       .catch(error => {
-        console.error(error);
-        setIsLoading(false);
-      });
-  }, [stats_player_seq]);
+        console.error(error) 
+        setIsLoading(false) 
+      }) 
+  }, [stats_player_seq]) 
 
-  const { name } = playerData;
+  const { name } = playerData 
 
-  let hasPitching = false;
-  let hasBatting = false;
-  let hasFielding = false;
+  let hasPitching = false 
+  let hasBatting = false 
+  let hasFielding = false 
   
   let years = []
   if (playerData.stats) {
@@ -48,35 +48,35 @@ export default function Player() {
   let playerClass, position, jerseyNumber, school
 
   if (latestYear) {
-    playerClass = playerData.stats[latestYear].class;
-    position = playerData.stats[latestYear].position;
-    jerseyNumber = playerData.stats[latestYear].jerseyNumber;
-    school = playerData.stats[latestYear].school;
+    playerClass = playerData.stats[latestYear].class 
+    position = playerData.stats[latestYear].position 
+    jerseyNumber = playerData.stats[latestYear].jerseyNumber 
+    school = playerData.stats[latestYear].school 
   }
   
   for (let year in playerData.stats) {
       if (playerData.stats[year].pitching && playerData.stats[year].pitching.pitches > 0) {
-          hasPitching = true;
+          hasPitching = true 
       }
   
       if (playerData.stats[year].batting && playerData.stats[year].batting.AB > 0) {
-          hasBatting = true;
+          hasBatting = true 
       }
   
       if (playerData.stats[year].fielding && playerData.stats[year].fielding.GP > 0) {
-          hasFielding = true;
+          hasFielding = true 
       }
   
       if (hasPitching && hasBatting && hasFielding) {
-          break;
+          break 
       }
   }
 
-  const teamData = teamInfo.find(team => team.ncaa_name === school) || {}; 
+  const teamData = teamInfo.find(team => team.ncaa_name === school) || {}  
 
   function createFullYear(yearShort) {
-    const yearMap = {"Fr": "Freshman", "So": "Sophomore", "Jr": "Junior", "Sr": "Senior"};
-    return yearMap[yearShort] || yearShort;
+    const yearMap = {"Fr": "Freshman", "So": "Sophomore", "Jr": "Junior", "Sr": "Senior"} 
+    return yearMap[yearShort] || yearShort 
   }
 
   if (isLoading) {
@@ -84,7 +84,7 @@ export default function Player() {
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
         <CircularProgress />
       </Box>
-    );
+    ) 
   }
   console.log(playerData)
   return (
@@ -151,5 +151,5 @@ export default function Player() {
         </Card>
       )}
     </Container>
-  );
+  ) 
 }
