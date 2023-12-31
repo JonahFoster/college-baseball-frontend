@@ -103,6 +103,14 @@ export default function App() {
             <Route path="/player/:stats_player_seq" element={<Player data={playerData} />} />
             <Route path="/search" element={<Search players={multipleSearchResults} />} />
           </Routes>
+          <p style={{
+            textAlign: 'center', 
+            fontStyle: 'italic', 
+            fontSize: '20px',
+            color: '#c3c3d4' 
+          }}>
+            Type a player name into the search bar, and then press search! Be sure to check your spelling.
+          </p>
         </Box>
       </Router>
     </ThemeProvider>
