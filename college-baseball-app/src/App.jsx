@@ -62,29 +62,34 @@ export default function App() {
 
   async function handleSearch(name, navigate) {
     try {
-      const playersQuery = query(collection(firestore, 'collegebaseballplayer'), where('name', '==', name))
-      const querySnapshot = await getDocs(playersQuery)
-      const players = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+      const playersQuery = query(
+        collection(firestore, 'collegebaseballplayer'),
+        where('name', '>=', name),
+        where('name', '<', name + '\uf8ff')
+      );
+      const querySnapshot = await getDocs(playersQuery);
+      const players = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   
       if (players.length === 0) {
-        console.log('No matching players found')
-        navigate('/search')
-        return
-      }
-
-      if (players.length === 1) {
-        setPlayerData(players[0])
-        navigate(`/player/${players[0].id}`)
-        return
+        console.log('No matching players found');
+        navigate('/search');
+        return;
       }
   
-      setMultipleSearchResults(players)
-      navigate('/search')
+      if (players.length === 1) {
+        setPlayerData(players[0]);
+        navigate(`/player/${players[0].id}`);
+        return;
+      }
+      console.log('Multiple players found:', players)
+      setMultipleSearchResults(players);
+      navigate('/search');
     } catch (error) {
-      console.error('Error fetching players:', error)
-      navigate('/search')
+      console.error('Error fetching players:', error);
+      navigate('/search');
     }
   }
+  
   
   return (
     <ThemeProvider theme={theme}>
