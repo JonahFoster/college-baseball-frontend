@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { Container, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Container, Card, CardContent, Grid, Typography, Link } from '@mui/material';
 import PropTypes from 'prop-types';
 import teamInfo from './assets/logos.json';
 import './assets/search.css'
@@ -38,7 +37,7 @@ export default function Search({ players }) {
                 </Grid>
                 <Grid item xs>
                   <Typography variant="h6">
-                    <Link to={`/player/${player.id}`}>
+                    <Link href={`/player/${player.id}`}>
                       {player.name}
                     </Link>
                   </Typography>
